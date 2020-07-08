@@ -32,6 +32,35 @@ html {
   position: relative;
   background-color: transparent; }
 
+.curr-weather-content {
+  display: flex;
+  justify-content: space-evenly;
+  margin-bottom: 2rem;
+  text-align: center;
+  overflow-x: auto;
+  flex-wrap: wrap; }
+  .curr-weather-content > div {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-width: 60px;
+    margin-bottom: 3rem; }
+
+.city-wrap {
+  color: yellow;
+  margin-bottom: 3rem; }
+  .city-wrap h1, .city-wrap h5 {
+    margin-bottom: 0; }
+
+.weather-data {
+  font-size: 2rem; }
+
+.curr-temp {
+  font-size: 3rem; }
+
+.unit {
+  font-size: .8rem; }
+
 .table-wrap {
   overflow-x: auto; }
 
@@ -39,14 +68,15 @@ html {
   z-index: 1;
   color: #fff;
   text-align: center; }
-  .table .icon {
-    display: block; }
-  .table th, .table td {
+  .table th, .table td, .table thead th {
     vertical-align: middle; }
 
 .result {
   padding: 4rem 2rem;
   position: relative; }
+  .result h3 {
+    color: yellow;
+    margin-bottom: 3rem; }
 
 .error {
   display: none;

@@ -62,15 +62,7 @@ const getWeekDay = (date) => {
     //Return the element that corresponds to that index.
     return weekdays[day];
 }
-
-
-
-/* ====================
- * API call will do it for us,
- * but we should be extra sure and replace
- * whitespace in city names as %20
- * ====================
- */
+//fix whitespace
 String.prototype.fixWhiteSpace = function () {
     return this.replace(/ /g, "%20");
 };
@@ -107,11 +99,80 @@ const getWeatherData = () => {
             const lat = data.coord.lat;
             const cityName = data.name;
             const country = data.sys.country;
+            const currIcon = data.weather[0].icon;
+            const currWeather = data.weather[0].main;
+            
+            let currTemp = data.main.temp;
+            let tempFeels = data.main.feels_like;
+            let currMinTemp = data.main.temp_min;
+            let currMaxTemp = data.main.temp_max;
+            
+            const humidity = data.main.humidity;
+            const wind = data.wind.speed;
+            const pressure = data.main.pressure;
+
+            //convert to Fahrenheit
+
+            currTemp = convertTemp(currTemp);
+            tempFeels = convertTemp(tempFeels);
+            currMinTemp = convertTemp(currMinTemp);
+            currMaxTemp = convertTemp(currMaxTemp);
+
+            //rounding values
+            currTemp = Math.round(currTemp);
+            tempFeels = Math.round(tempFeels);
+            currMinTemp = Math.round(currMinTemp);
+            currMaxTemp = Math.round(currMaxTemp);
+            
 
             result.innerHTML = `
+            <!-- <h3>Current weather</h3> -->
 
-            <div><span>City:</span> ${cityName}</div>
-            <div><span>Country:</span> ${country}</div>
+            <div class="city-wrap">
+            <h1>${cityName} - </h1>
+            <h5> ${country}</h5>
+        </div>
+            <div class="curr-weather-content">
+           
+        <div>
+            <div class="weather-data"><img src="http://openweathermap.org/img/wn/${currIcon}@2x.png" alt="${currIcon}"></div>
+            <div class="weather-desc">${currWeather}</div>
+        </div>
+        <div>
+            <div class="curr-temp weather-data">${currTemp}<span>&#176;</span></div>
+            <div class="weather-desc">current <br/>temperature</div>
+        </div>
+        <div>
+            <div class="weather-data">${currTemp}<span>&#176;</span> </div>
+            <div class="weather-desc">feels  <br/> like</div>
+        
+        </div>
+        <div>
+            <div class="weather-data">${currMinTemp}<span>&#176;</span> </div>
+            <div class="weather-desc">min  <br/> temp</div>
+        </div>
+        
+        <div>
+            <div class="weather-data">${currMaxTemp}<span>&#176;</span> </div>
+            <div class="weather-desc">max  <br/> temp</div>
+        </div>
+        
+        <div>
+            <div class="weather-data">${humidity} <span class="unit">%</span> </div>
+            <div class="weather-desc">humidity</div>
+        </div>
+        
+        <div>
+            <div class="weather-data">${wind} <span class="unit"> <span class="unit"></span>m/s</span></div>
+            <div class="weather-desc">wind</div>
+        </div>
+        
+        <div>
+            <div class="weather-data">${pressure}  <span class="unit"> hpa</span> </div>
+            <div class="weather-desc">pressure</div>
+        </div>
+            
+        </div>
     
             `;
 
@@ -129,13 +190,6 @@ const getWeatherData = () => {
                     console.error(`Retreival error: ${e}`);
                 })
                 .then(data => {
-
-
-                    console.log(apiCallOne);
-
-                    const loni = data.timezone;
-
-                    console.log(loni);
 
                     const resultDiv = document.getElementById("search-result"),
                         errorDiv = document.getElementById("errorContainer");
@@ -169,35 +223,40 @@ const getWeatherData = () => {
                         let weekDay = getWeekDay(getDay);
 
 
-
+                        //weather data
                         const weather = data.daily[i].weather[0].description;
                         let temp = data.daily[i].temp.day;
-                        temp = convertTemp(temp);
                         let minTemp = data.daily[i].temp.min;
-                        minTemp = convertTemp(minTemp);
                         let maxTemp = data.daily[i].temp.max;
-                        maxTemp = convertTemp(maxTemp);
                         const icon = data.daily[i].weather[0].icon;
-                        console.log(data.daily[i].sunrise);
-                        console.log(data.daily[i].dt);
+                       
+                        temp = convertTemp(temp);
+                        minTemp = convertTemp(minTemp);
+                        maxTemp = convertTemp(maxTemp);
+
+                        temp = Math.round(temp);
+                        minTemp = Math.round(minTemp);
+                        maxTemp = Math.round(maxTemp);
 
                         //html 
 
                         let tr = document.createElement('tr');
-                        tr.innerHTML = `<th scope="row">${weekDay}</th>
-                            <td><span class="icon"><img src="http://openweathermap.org/img/wn/${icon}.png" alt="${icon}"></span><span>${weather}</span></td>
-                            <td>${temp}</td>
-                            <td>${minTemp}</td>
-                            <td>${maxTemp}</td>`;
+                        tr.innerHTML = `
+                        <th scope="row">
+                        <div>${weekDay}</div>
+                        <div>${day}</div>
+                        </th>
+                            <td>
+                            <div><img src="http://openweathermap.org/img/wn/${icon}.png" alt="${icon}"></div>
+                            <div>${weather}</div>
+                            </td>
+                            <td>${temp}<span>&#176;</span></td>
+                            <td>${minTemp}<span>&#176;</span></td>
+                            <td>${maxTemp}<span>&#176;</span></td>`;
 
                         tableBody.appendChild(tr);
 
-
-
-
                     }
-
-
                 })
         })
         .catch(e => {
@@ -224,3 +283,8 @@ getWeather.onclick = function () {
 userInput.onkeydown = function (e) {
     if (e.key === 'Enter') getWeatherData();
 };
+
+
+
+
+
