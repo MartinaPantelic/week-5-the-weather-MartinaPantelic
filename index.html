@@ -1,29 +1,61 @@
 <!DOCTYPE HTML>
-<html >
-  <head>
-    <meta charset="utf-8">
-    <title>weather</title>
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-    <link href="https://fonts.googleapis.com/css2?family=Megrim&display=swap" rel="stylesheet">
-    <link href= "index.css" rel="stylesheet"></link>
-  </head>
-  <body>
+<html>
 
-    <div class="container">
-      <div class="jumbotron bg-dark text-white">
-        <h1 class="display-4">City Weather</h1>
-        <p class="lead">This is a simple weather app. Enter the name of the city and will get all the information about the city's weather</p>
-        <hr class="my-4">
-        <div class="input-group mb-3 container">
-          <input type="text" class="form-control" placeholder="City Name" name="city" id="city">
-          <div class="input-group-append">
-              <button class="btn btn-outline-info" type="button" id="search">Search</button>
-          </div>
+<head>
+  <meta charset="utf-8">
+  <title>weather</title>
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+    integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+  <link href="https://fonts.googleapis.com/css2?family=Megrim&display=swap" rel="stylesheet">
+  <link href="index.css" rel="stylesheet">
+  </link>
+</head>
+
+<body>
+  <main class="main-content text-white">
+    <div class="bckg"></div>
+    <div class="jumbotron container">
+      <h1 class="display-4">City Weather</h1>
+      <p class="lead">This is a simple weather app. Enter the name of the city and will get all the information about
+        the city's weather</p>
+      <hr class="my-4">
+      <div class="input-group mb-3">
+        <input type="text" id="user-input" class="user-input form-control" placeholder="City Name" name="city"
+          id="city">
+        <div class="input-group-append">
+          <button class="btn btn-outline-info" type="button" id="search">Search</button>
         </div>
       </div>
-      <div id="info"> </div>
     </div>
-    <script type="text/javascript" src="weather.js"></script>
-  </body>
+
+
+    <!--result-->
+
+    <div class="result container" id="search-result">
+      <div id="results">
+        </div>
+        <div class="table-wrap">
+          <table id="result-table" class="table">
+            <thead id="table-head">
+            </thead>
+            <tbody id="table-body"></tbody>
+          </table>
+        </div>
+    </div>
+
+    <!--error-->
+    <div class="error" id="errorContainer">
+      <span class="close">&times;</span> CITY NOT FOUND
+    </div>
+  </main>
+
+
+
+
+
+
+  <script type="text/javascript" src="weather.js"></script>
+</body>
+
 </html>

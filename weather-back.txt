@@ -5,7 +5,6 @@ const getWeather = document.getElementById("search"),
     userInput = document.getElementById("user-input"),
     error = document.getElementById("error"),
     result = document.getElementById("results"),
-    resultTable = document.getElementById("result-table"),
     closeButtons = document.getElementsByClassName("close");
 
 /*
@@ -48,23 +47,6 @@ String.prototype.toProperCase = function () {
     });
 };
 
-
-/*
-days in week
-*/
-const getWeekDay = (date) => {
-    //Create an array containing each day, starting with Sunday.
-    let weekdays = new Array(
-        "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"
-    );
-    //Use the getDay() method to get the day.
-    let day = date.getDay();
-    //Return the element that corresponds to that index.
-    return weekdays[day];
-}
-
-
-
 /* ====================
  * API call will do it for us,
  * but we should be extra sure and replace
@@ -82,10 +64,18 @@ window.onload = function () {
     pairCloseButtons(closeButtons);
 };
 
-// GET WEATHER
+
+/* ========================================
+ * getWeatherData() => main function for retrieving data.
+ * This function fetches weather data via
+ * API call to OpenWeatherMap (https://openweathermap.org)
+ * We call the API with our city name and public key.
+ * The info we get back is parsed as JSON ( .json() )
+ * We then set up our results div and place in 
+ * The elements we wish to target
+ * ========================================
+ */
 const getWeatherData = () => {
-
-
     let city = userInput.value.trim();
     let publicKey = `8fd8cd4cfceeb698eef7a7cd4ea325cc`;
     let lon;
@@ -130,6 +120,7 @@ const getWeatherData = () => {
                 })
                 .then(data => {
 
+                   
 
                     console.log(apiCallOne);
 
@@ -143,58 +134,30 @@ const getWeatherData = () => {
                     resultDiv.style.display = "block"; // if results, display
                     window.scrollTo(0, 200); //scroll if window is too small to view results.
 
-                    //create table
-
-                    const tableHead = document.getElementById('table-head')
-                    const tableBody = document.getElementById('table-body');
-
-                    let tr = document.createElement('tr');
-                    tr.innerHTML = `<th scope="col"></th>
-                    <th scope="col">Weather</th>
-                    <th scope="col">Temperature</th>
-                    <th scope="col">Min Temperature</th>
-                    <th scope="col">Max Temperature</th>`;
-
-                    tableHead.appendChild(tr);
-
                     //loop throught days
 
                     for (let i = 0; i < 7; i++) {
 
-                        //const day = data.daily[i].dt;
-                        let getDay = new Date(data.daily[i].dt * 1000);
-                        let date = getDay.getDate();
-                        let month = getDay.getMonth() + 1;
-                        let day = `${month}. ${date}.`;
-                        let weekDay = getWeekDay(getDay);
-
-
-
-                        const weather = data.daily[i].weather[0].description;
+                        const weather = data.daily[i].weather[0].main;
                         let temp = data.daily[i].temp.day;
                         temp = convertTemp(temp);
                         let minTemp = data.daily[i].temp.min;
                         minTemp = convertTemp(minTemp);
-                        let maxTemp = data.daily[i].temp.max;
-                        maxTemp = convertTemp(maxTemp);
                         const icon = data.daily[i].weather[0].icon;
+                        // const icon = `https://s3-us-west-2.amazonaws.com/s.cdpn.io/162656/data.daily[i].weather[0].svg`;
                         console.log(data.daily[i].sunrise);
-                        console.log(data.daily[i].dt);
 
                         //html 
+                        result.insertAdjacentHTML("afterend", `
 
-                        let tr = document.createElement('tr');
-                        tr.innerHTML = `<th scope="row">${weekDay}</th>
-                            <td><span class="icon"><img src="http://openweathermap.org/img/wn/${icon}.png" alt="${icon}"></span><span>${weather}</span></td>
-                            <td>${temp}</td>
-                            <td>${minTemp}</td>
-                            <td>${maxTemp}</td>`;
-
-                        tableBody.appendChild(tr);
-
-
-
-
+                        <div><span>Weather:</span> ${weather}</div>
+                        <div><span>Daily temp:</span> ${temp}</div>
+                        <div><span>Min temp:</span>${minTemp}</div>
+                        <div><img class="city-icon" src="http://openweathermap.org/img/wn/${icon}.png" alt="weather-icon"></div>
+                        <div class="${icon}"></div>
+                        
+                        
+                        `);
                     }
 
 
