@@ -1,6 +1,6 @@
-/* 
-     Declaring DOM elements
- */
+
+ //    Declaring DOM elements:
+
 const getWeather = document.getElementById("search"),
     userInput = document.getElementById("user-input"),
     error = document.getElementById("error"),
@@ -8,9 +8,10 @@ const getWeather = document.getElementById("search"),
     resultTable = document.getElementById("result-table"),
     closeButtons = document.getElementsByClassName("close");
 
-/*
-     Functions:
- */
+
+// FUNCTIONS
+
+// fade-in-out
 
 const pairCloseButtons = elements => {
     for (let each of elements) {
@@ -21,26 +22,17 @@ const pairCloseButtons = elements => {
             const displayNone = () => {
                 this.parentElement.style.display = "none";
             };
-            // if we don't set timeout, we miss our ~BEAUTIFUL~ animation
             return setTimeout(displayNone, 300);
         };
     }
 };
 
-/*
-     Error messages:
- */
-const showErrors = el => {
-    for (let each of el) {
-        each.style.display = "block";
-    }
-};
 
-/*
-    converting Kelvins to Fahrenheit
- */
+ //   converting Kelvins to Fahrenheit
+
 const convertTemp = K => (1.8 * (K - 273) + 32).toFixed(2);
 
+// convert to proper case
 
 String.prototype.toProperCase = function () {
     return this.replace(/\w\S*/g, function (txt) {
@@ -49,9 +41,8 @@ String.prototype.toProperCase = function () {
 };
 
 
-/*
-days in week
-*/
+// days in week
+
 const getWeekDay = (date) => {
     //Create an array containing each day, starting with Sunday.
     let weekdays = new Array(
@@ -63,13 +54,11 @@ const getWeekDay = (date) => {
     return weekdays[day];
 }
 //fix whitespace
-String.prototype.fixWhiteSpace = function () {
-    return this.replace(/ /g, "%20");
-};
+// String.prototype.fixWhiteSpace = function () {
+//     return this.replace(/ /g, "%20");
+// };
 
-/*
-	Window / Button Functionality:
-*/
+//close
 window.onload = function () {
     pairCloseButtons(closeButtons);
 };
@@ -77,12 +66,11 @@ window.onload = function () {
 // GET WEATHER
 const getWeatherData = () => {
 
-
-    let city = userInput.value.trim();
+    let city = userInput.value;
     let publicKey = `8fd8cd4cfceeb698eef7a7cd4ea325cc`;
     let lon;
     let lat;
-    let apiCallCurrentWeather = `http://api.openweathermap.org/data/2.5/weather?q=${city.fixWhiteSpace()}&appid=${publicKey}`;
+    let apiCallCurrentWeather = `http://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${publicKey}`;
     console.log(apiCallCurrentWeather);
 
     fetch(apiCallCurrentWeather)
@@ -91,9 +79,7 @@ const getWeatherData = () => {
             console.error(`Retreival error: ${e}`);
         })
         .then(data => {
-            /* [0] holds all the most recent info, if we wanted all the info
-			  we could simply cycle through all of the elements.
-        */
+           
             console.log(data.coord.lon);
             const lon = data.coord.lon;
             const lat = data.coord.lat;
@@ -129,11 +115,10 @@ const getWeatherData = () => {
             <!-- <h3>Current weather</h3> -->
 
             <div class="city-wrap">
-            <h1>${cityName} - </h1>
+            <h1>${cityName}</h1>
             <h5> ${country}</h5>
         </div>
             <div class="curr-weather-content">
-           
         <div>
             <div class="weather-data"><img src="http://openweathermap.org/img/wn/${currIcon}@2x.png" alt="${currIcon}"></div>
             <div class="weather-desc">${currWeather}</div>
@@ -182,8 +167,6 @@ const getWeatherData = () => {
             &appid=${publicKey}`;
 
 
-            //second fetch
-
             fetch(apiCallOne)
                 .then(response => response.json())
                 .catch(e => {
@@ -199,8 +182,10 @@ const getWeatherData = () => {
 
                     //create table
 
-                    const tableHead = document.getElementById('table-head')
-                    const tableBody = document.getElementById('table-body');
+                    const tableHead = document.getElementById('table-head'),
+                         tableBody = document.getElementById('table-body');
+                    tableHead.removeChild(tableHead.childNodes[0]);
+     
 
                     let tr = document.createElement('tr');
                     tr.innerHTML = `<th scope="col"></th>
@@ -216,19 +201,20 @@ const getWeatherData = () => {
                     for (let i = 0; i < 7; i++) {
 
                         //const day = data.daily[i].dt;
-                        let getDay = new Date(data.daily[i].dt * 1000);
-                        let date = getDay.getDate();
-                        let month = getDay.getMonth() + 1;
-                        let day = `${month}. ${date}.`;
-                        let weekDay = getWeekDay(getDay);
+                        let getDay = new Date(data.daily[i].dt * 1000),
+                             date = getDay.getDate(),
+                             month = getDay.getMonth() + 1,
+                             day = `${month}. ${date}.`,
+                             weekDay = getWeekDay(getDay);
 
 
                         //weather data
-                        const weather = data.daily[i].weather[0].description;
-                        let temp = data.daily[i].temp.day;
-                        let minTemp = data.daily[i].temp.min;
-                        let maxTemp = data.daily[i].temp.max;
-                        const icon = data.daily[i].weather[0].icon;
+                        const weather = data.daily[i].weather[0].description,
+                              icon = data.daily[i].weather[0].icon;
+
+                        let temp = data.daily[i].temp.day,
+                            minTemp = data.daily[i].temp.min,
+                            maxTemp = data.daily[i].temp.max;
                        
                         temp = convertTemp(temp);
                         minTemp = convertTemp(minTemp);
@@ -261,13 +247,12 @@ const getWeatherData = () => {
         })
         .catch(e => {
             let resultDiv = document.getElementById("search-result"),
-                errorDiv = document.getElementById("errorContainer"),
-                errorMsg = document.getElementById("error");
+                errorDiv = document.getElementById("errorContainer");
+               
             resultDiv.style.display = "none"; // if error, no results
             errorDiv.style.display = "block"; // display error
             errorDiv.classList.remove("fade-out"); // fade animations
             errorDiv.classList.add("fade-in"); // fade animations
-            errorMsg.innerHTML = `Cannot find: ${city}!`; // display error msg.
             console.error(`Data Error: ${e} \n city probably does not exist`);
         });
 
