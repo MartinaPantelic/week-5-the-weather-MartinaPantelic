@@ -251,7 +251,7 @@ const getApiCallOne = (api) => {
                 <div>${day}</div>
                 </th>
                     <td>
-                    <div><img src="http://openweathermap.org/img/wn/${icon}.png" alt="${icon}"></div>
+                    <div><img src="https://openweathermap.org/img/wn/${icon}.png" alt="${icon}"></div>
                     <div>${weather}</div>
                     </td>
                     <td>${temp}<span>&#176;</span></td>
