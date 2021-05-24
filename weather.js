@@ -69,7 +69,7 @@ const getWeatherData = () => {
     let publicKey = `8fd8cd4cfceeb698eef7a7cd4ea325cc`;
     let lon;
     let lat;
-    let apiCallCurrentWeather = `http://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${publicKey}`;
+    let apiCallCurrentWeather = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${publicKey}`;
     console.log(apiCallCurrentWeather);
 
     fetch(apiCallCurrentWeather)
@@ -119,7 +119,7 @@ const getWeatherData = () => {
         </div>
             <div class="curr-weather-content">
         <div>
-            <div class="weather-data"><img src="http://openweathermap.org/img/wn/${currIcon}@2x.png" alt="${currIcon}"></div>
+            <div class="weather-data"><img src="https://openweathermap.org/img/wn/${currIcon}@2x.png" alt="${currIcon}"></div>
             <div class="weather-desc">${currWeather}</div>
         </div>
         <div>
